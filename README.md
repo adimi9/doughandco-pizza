@@ -34,8 +34,8 @@ A modern e-commerce website built using **Next.js** where users can browse a men
    ```bash
    npm install
    ```
-3. Set up environment variables:
-   Create a .env file in the root of the project and add
+3. Set up environment variables:<br>
+   Create a `.env `file in the root of the project and add
    ```bash
      DATABASE_URL=postgresql://USER:PASSWORD@HOST:PORT/DATABASE_NAME
      SECRET=your_secret
