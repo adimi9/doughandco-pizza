@@ -48,8 +48,7 @@ A modern e-commerce website built using **Next.js** where users can browse a men
 
 ## 🌍 **Deployment**
 
-The application is deployed on Vercel and can be accessed via the following URL:
-- https://doughandco-pizza-seko.vercel.app/
+The application is deployed on Vercel and can be accessed via the following URL: https://doughandco-pizza-seko.vercel.app/
   
 To deploy your own version, follow these steps:
 1. Fork or clone the repository.
