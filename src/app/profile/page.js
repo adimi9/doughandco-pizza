@@ -5,6 +5,8 @@ import {useSession} from "next-auth/react";
 import {redirect} from "next/navigation";
 import {useEffect, useState} from "react";
 import toast from "react-hot-toast"; 
+import { signIn } from "next-auth/react"; // Import signIn
+
 
 export default function ProfilePage() {
   const session = useSession(); 
@@ -53,6 +55,8 @@ export default function ProfilePage() {
               if (!response.ok) {
                 throw new Error('Failed to update profile');  
               }
+              // Refresh the session after updating the profile
+              await signIn("credentials", { redirect: false });
           }
       ), 
       {
