@@ -13,6 +13,7 @@ A modern e-commerce website built using **Next.js** where users can browse a men
   - **Prisma** – ORM for managing the database (PostgreSQL).
   - **bcrypt** – Password hashing for secure authentication.
   - **PostgreSQL** – Database for storing user and order data.
+  - **Amazon Web Services (AWS) S3** - Image storage to handle file uploads securely to the cloud.
 
 - **Deployment**: 
   - **Vercel** – For hosting the Next.js application.
