@@ -35,12 +35,13 @@ A modern e-commerce website built using **Next.js** where users can browse a men
    npm install
    ```
 3. Set up environment variables:
-   - Create a .env file in the root of the project and add
-     ```bash
+   Create a .env file in the root of the project and add
+   ```bash
      DATABASE_URL=postgresql://USER:PASSWORD@HOST:PORT/DATABASE_NAME
      SECRET=your_secret
      MY_AWS_ACCESS_KEY=your_aws_access_key
      MY_AWS_SECRET_KEY=your_aws_secret_key
+   ```
 4. Run the app in development mode:
    ```bash
    npm run dev
