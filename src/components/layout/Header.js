@@ -5,9 +5,10 @@ import Bars2 from "@/components/icons/Bars2";
 import ShoppingCart from "@/components/icons/ShoppingCart"; 
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link"; 
-import { useContext, useState } from "react"; 
+import { useContext, useState } from "react";
+import { useRouter } from "next/navigation";  // Import useRouter for redirection
 
-function AuthLinks({status, userName}) {
+function AuthLinks({status, userName, clearCart}) {
   if (status === 'loading') {
     return <span>Loading...</span>
   }
@@ -18,7 +19,16 @@ function AuthLinks({status, userName}) {
           Hello, { userName }
         </Link>
         <button 
-          onClick={() => signOut()} 
+          onClick={() => {           
+            // Clear cart in the state as well
+            clearCart();  
+
+            // Sign out the user
+            signOut();
+
+            // Redirect to the home page after logging out
+            router.push('/');  // Use router.push to navigate
+          }} 
           className="bg-primary rounded-full text-white px-8 py-2">
             Logout
         </button>
@@ -41,10 +51,11 @@ export default function Header() {
   const status = session?.status; 
   const userData = session.data?.user; 
   let userName = userData?.name || userData?.email; 
-  const { cartProducts } = useContext(CartContext); 
+  const { cartProducts, clearCart } = useContext(CartContext); 
   if (userName && userName.includes(' ')) {
     userName = userName.split(' ')[0]; 
   }
+  const router = useRouter();
   
   return (
     <header>
@@ -59,7 +70,7 @@ export default function Header() {
           <Link href={'/#contact'}>Contact</Link>
         </nav>
         <nav className="flex items-center gap-4 text-gray-500 font-semibold">
-          <AuthLinks status={status} userName={userName} />
+          <AuthLinks status={status} userName={userName} clearCart={clearCart}/>
           <Link href={'/cart'} className="relative">
             <ShoppingCart />
             {cartProducts?.length > 0 && (

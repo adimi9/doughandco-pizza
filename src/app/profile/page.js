@@ -7,14 +7,17 @@ import {useEffect, useState} from "react";
 import toast from "react-hot-toast"; 
 import { signIn } from "next-auth/react"; // Import signIn
 
+const reloadSession = () => {
+  const event = new Event("visibilitychange");
+  document.dispatchEvent(event);
+};
 
 export default function ProfilePage() {
-  const session = useSession(); 
+  const {data: session, status } = useSession()
 
   const [user, setUser] = useState(null); 
   const [isAdmin, setIsAdmin] = useState(null); 
   const [profileFetched, setProfileFetched] = useState(false); 
-  const { status } = session; 
 
   if (status === 'unauthenticated') {
     return redirect('/login'); 
@@ -55,8 +58,6 @@ export default function ProfilePage() {
               if (!response.ok) {
                 throw new Error('Failed to update profile');  
               }
-              // Refresh the session after updating the profile
-              await signIn("credentials", { redirect: false });
           }
       ), 
       {
