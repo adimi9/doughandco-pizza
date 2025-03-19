@@ -4,7 +4,7 @@
 
 body {
     overflow-x: hidden;
-    background-image: linear-gradient(to bottom, #E8D4A5, #FFFFFF 50%);  /* Beige-yellow */
+    background-image: linear-gradient(to bottom, #E8D4A5, #FFFFFF 70%);  /* Beige-yellow */
     margin: 0;  /* Ensure no margin is affecting layout */
     height: 100vh;
 }
