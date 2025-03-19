@@ -15,7 +15,7 @@ export default function RootLayout({ children }) {
     <html lang="en" className="scroll-smooth">
       <body className={roboto.className}>
         <main 
-          className="flex-1 max-w-4xl mx-auto p-4">
+          className="flex-1 max-w-7xl mx-auto p-4">
             <AppProvider>
               <SessionProvider>
                 <Header />

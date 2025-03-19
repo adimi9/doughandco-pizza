@@ -8,9 +8,9 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: '#F4A300',
+        primary: '#006D3D',
         background: '#F3E9DC',
-        accent: '#006D3D',
+        accent: '#F4EAD2',
         text: '#4B2C20',
         highlight: '#F4A261',
       },

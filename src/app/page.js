@@ -7,6 +7,7 @@ export default function Home() {
   return (
     <>
       <Hero />
+      <br />
       <HomeMenu />
       <section className="text-center my-16" id = "about">  
         <SectionHeaders
