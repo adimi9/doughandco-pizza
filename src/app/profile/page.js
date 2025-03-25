@@ -1,3 +1,9 @@
+// Technologies involved: 
+// - React (JSX) - component-based UI design  
+// - NextAuth.js - User Authentication 
+// - Prisma - PrismaClient used to interact w database to fetch / update user data 
+// - JavaScript - asynchrnous operations 
+
 'use client'; 
 import UserForm from "@/components/form/UserForm";
 import UserTabs from "@/components/layout/UserTabs";
@@ -5,12 +11,6 @@ import {useSession} from "next-auth/react";
 import {redirect} from "next/navigation";
 import {useEffect, useState} from "react";
 import toast from "react-hot-toast"; 
-import { signIn } from "next-auth/react"; // Import signIn
-
-const reloadSession = () => {
-  const event = new Event("visibilitychange");
-  document.dispatchEvent(event);
-};
 
 export default function ProfilePage() {
   const {data: session, status } = useSession()
@@ -28,7 +28,7 @@ export default function ProfilePage() {
       fetch('/api/profile').then(response => {
         response.json().then(data => {
           setUser(data); 
-          setIsAdmin(data.admin); 
+          setIsAdmin(data.userinfo.admin); 
           setProfileFetched(true); 
         })
       }); 
@@ -83,4 +83,3 @@ export default function ProfilePage() {
 
 
 }
-

@@ -54,6 +54,7 @@ export async function POST(req) {
         }
       });
 
+      console.log("YAYAYYAYA", newMenuItem);
       return new Response(
         JSON.stringify({ newMenuItem }),
         { status: 200 },

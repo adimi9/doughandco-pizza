@@ -5,14 +5,15 @@ import { useProfile } from "@/components/UseProfile";
 import { useState } from "react"; 
 
 export default function UserForm({user, onSave}) {
-    const [userName, setUserName] = useState(user?.name || ''); 
-    const [image, setImage] = useState(user?.image || '');
-    const [phone, setPhone] = useState(user?.phone || '');
-    const [streetAddress, setStreetAddress] = useState(user?.streetAddress || '');
-    const [postalCode, setPostalCode] = useState(user?.postalCode || '');
-    const [city, setCity] = useState(user?.city || '');
-    const [country, setCountry] = useState(user?.country || '');
-    const [admin, setAdmin] = useState(user?.admin || false);
+    const [userName, setUserName] = useState(user?.userinfo?.name || ''); 
+    const [image, setImage] = useState(user?.userinfo?.image || '');
+    const [phone, setPhone] = useState(user?.userinfo?.phone || '');
+    const [streetAddress, setStreetAddress] = useState(user?.userinfo?.streetAddress || '');
+    const [postalCode, setPostalCode] = useState(user?.userinfo?.postalCode || '');
+    const [city, setCity] = useState(user?.userinfo?.city || '');
+    const [country, setCountry] = useState(user?.userinfo?.country || '');
+    const [admin, setAdmin] = useState(user?.userinfo?.admin || false);
+    
     const {data:loggedInUserData} = useProfile();
 
     function handleAddressChange(propName, value) {

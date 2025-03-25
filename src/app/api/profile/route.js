@@ -1,9 +1,16 @@
+// Technologies involved: 
+// - Next.js - profile/route.js : API route that handles profile-related API requests 
+// - NextAuth.js - User Authentication 
+// - Prisma - PrismaClient used to interact w database to fetch / update user data 
+// - JavaScript - asynchrnous operations 
+
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { getServerSession } from "next-auth";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
+// allows an authenticated user to update their profile information in the database 
 export async function PUT(req) {
   try {
     const data = await req.json();
@@ -20,23 +27,11 @@ export async function PUT(req) {
       return Response.json({ message: "User not found" }, { status: 404 });
     }
 
-    await prisma.User.update({
-      where: filterUser, 
-      data: {
-        name: name, 
-        image: image,
-      }
-    }); 
-
-    await prisma.UserInfo.upsert({
+    await prisma.UserInfo.update({
       where: {
-        email: user.email 
+        userId: user.id 
       },
-      update: otherUserInfo, 
-      create: {
-        email: user.email, 
-        ...otherUserInfo, 
-      },
+      data: otherUserInfo, 
     });
 
     return Response.json(true); 
@@ -46,7 +41,8 @@ export async function PUT(req) {
   }
 }
 
-
+// retrieve the profile details of the currently authenticated user
+// (or another user if (_id) is provided 
 export async function GET(req) {
   const url = new URL(req.url); 
   const _id = url.searchParams.get('_id'); 
@@ -61,19 +57,11 @@ export async function GET(req) {
   try {
     const user = await prisma.User.findUnique({
       where: filterUser,
-    }); 
-
-    if (!user) {
-      return Response.json({ message: "User not found!" }, { status: 404 }); 
-    }
-
-    const userInfo = await prisma.UserInfo.findUnique({
-      where: {
-        email: user.email 
+      include: {
+        userinfo: true
       }
-    });
-
-    return Response.json({ ...user, ...userInfo });
+    }); 
+    return Response.json(user);
   } catch (error) {
     console.error(error); 
     return Response.json({ message: "Error fetching user data", error: error.message }, { status: 500});

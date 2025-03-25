@@ -58,7 +58,12 @@ export default function FormPage() {
           pattern="^(?=.*[A-Z])(?=.*[a-z])(?=.*[\W_]).{8,}$"
         />
 
-        <button type="submit">Login</button>      
+        <button type="submit">Login</button>  
+
+        <div className="text-center my-4 text-gray-500 border-t pt-4">
+            New user?{' '}
+            <Link className="underline" href={'/register'}>Register here &raquo;</Link>
+        </div>     
       
       </form>
     </section>

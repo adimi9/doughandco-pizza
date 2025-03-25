@@ -70,6 +70,7 @@ export default function CartPage() {
     }
 
     return (
+        <section className = "max-w-screen px-4 md:px-10 border-black">
         <section className="mt-8">
         <div className="text-center">
             <SectionHeaders mainHeader="Cart" />
@@ -99,7 +100,7 @@ export default function CartPage() {
                 </div>
             </div>
             </div>
-            <div className="bg-gray-100 p-4 rounded-lg">
+            <div className="border-gray-100 p-4 rounded-lg">
             <h2><b>Checkout</b></h2>
             <form onSubmit={proceedToCheckout}>
                 <AddressInputs
@@ -110,6 +111,7 @@ export default function CartPage() {
             </form>
             </div>
         </div>
+        </section>
         </section>
     );
 }

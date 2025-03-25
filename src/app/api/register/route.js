@@ -12,8 +12,16 @@ export async function POST(req) {
     const salt = bcrypt.genSaltSync(10);
     body.password = bcrypt.hashSync(notHashedPassword, salt);
 
+    // Create the User 
     const createdUser = await prisma.User.create({
       data: body,
+    });
+
+    // Create the UserInfo 
+    await prisma.UserInfo.create({
+      data: {
+        userId: createdUser.id 
+      }  
     });
 
     return Response.json(createdUser);

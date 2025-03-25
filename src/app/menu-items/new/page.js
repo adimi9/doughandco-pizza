@@ -190,7 +190,7 @@ export default function NewMenuItemPage() {
     return 'Loading user info...';
   }
 
-  if (!data.admin) {
+  if (!data.userinfo.admin) {
     return 'Not an admin.';
   }
 

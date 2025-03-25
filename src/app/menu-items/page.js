@@ -26,7 +26,7 @@ export default function MenuItemsPage() {
     return 'Loading user info...';
   }
 
-  if (!data.admin) {
+  if (!data.userinfo.admin) {
     return 'Not an admin.';
   }
 

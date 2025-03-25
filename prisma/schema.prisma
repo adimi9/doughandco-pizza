@@ -8,24 +8,25 @@ datasource db {
 }
 
 model User {
-  id                 Int    @id @default(autoincrement())
-  email              String @unique
+  id                 Int       @id @default(autoincrement())
+  email              String    @unique
   password           String
-  name               String @default("")
-  image              String @default("")
-  createdAt DateTime @default(now())
+  userinfo           UserInfo?
 }
 
 model UserInfo {
-  id                 Int     @id @default(autoincrement()) 
-  email              String  @unique
-  phone              String  @default("")
-  streetAddress      String  @default("")
-  postalCode         String  @default("")
-  city               String  @default("")
-  country            String  @default("") 
-  admin              Boolean @default(false)
-  createdAt DateTime @default(now())
+  id                 Int      @id @default(autoincrement()) 
+  name               String   @default("")
+  image              String   @default("") 
+  phone              String   @default("")
+  streetAddress      String   @default("")
+  postalCode         String   @default("")
+  city               String   @default("")
+  country            String   @default("") 
+  admin              Boolean  @default(false)
+  createdAt          DateTime @default(now())
+  user               User     @relation(fields: [userId], references: [id])
+  userId             Int      @unique 
 }
 
 model Category {

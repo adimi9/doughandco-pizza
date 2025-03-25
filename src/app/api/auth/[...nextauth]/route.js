@@ -26,6 +26,7 @@ export const authOptions = {
         // Find user in the database
         const user = await prisma.User.findUnique({
           where: { email: credentials.email },
+          include: { userinfo: true }
         });
 
         if (!user) {
@@ -48,14 +49,29 @@ export const authOptions = {
     strategy: "jwt", // Use JWT instead of database sessions
   },
   callbacks: {
-    async session({ session, user }) {
+    async jwt({ token, user }) {
+      // When the user logs in, attach userinfo to the JWT
+      if (user) {
+        const dbUser = await prisma.User.findUnique({
+          where: { email: user.email },
+          include: { userinfo: true }
+        });
+  
+        token.id = dbUser?.id;
+        token.userinfo = dbUser?.userinfo; // Add userinfo to token
+      }
+      return token;
+    },
+  
+    async session({ session, token }) {
+      // Transfer token data to session
       if (session.user) {
-        const dbUser = await prisma.user.findUnique({ where: { email: session.user.email } });
-        session.user.id = dbUser?.id;
+        session.user.id = token.id;
+        session.user.userinfo = token.userinfo; // Attach userinfo to session
       }
       return session;
     },
-  },
+  }
 };
 
 export async function isAdmin() {
@@ -66,13 +82,15 @@ export async function isAdmin() {
     return false; 
   }
 
-  const userInformation = await prisma.UserInfo.findUnique({
-                            where: { email:userEmail }
+  const user = await prisma.User.findUnique({
+                            where: { email:userEmail },
+                            include: { userinfo: true }
                           }); 
-  if (!userInformation) {
+  console.log("USERR", user); 
+  if (!user) {
     return false; 
   }
-  return userInformation.admin; 
+  return user.userinfo.admin; 
 }
 
 const handler = NextAuth(authOptions);

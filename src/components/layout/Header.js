@@ -1,127 +1,106 @@
-/**
- * Header Component
- * 
- * This component includes navigation links for different sections of the website 
- * - Home, Menu, About, Content 
- * 
- * It dynamically updates based on the user's authentication status using NextAuth's `useSession` hook
- * - If the user is authenticated, the username is shown, and the logout button is provided. 
- * - If the user is not authenticated, Login and Register links are dsplayed. 
- * 
- * @component 
- * @returns {JSX.Element} Header component with navigation and authentication links 
- */
-
 'use client'; 
 
 import { CartContext } from "@/components/AppContext"; 
 import ShoppingCart from "@/components/icons/ShoppingCart"; 
+import ProfileIcon from "../icons/ProfileIcon";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link"; 
 import { useContext } from "react";
 import { useRouter } from "next/navigation";  
 
+import { Luckiest_Guy } from "next/font/google"; // Import the Rubik Burned font
+const luckiestguy = Luckiest_Guy({ subsets: ['latin'], weight: '400' }); // Define the Rubik Burned font
 
-/**
- * Helper Function AuthLinks 
- * 
- * Renders different links based on the user's authentication status. 
- * - If the status is 'loading': it shows a loading message
- * - If the user is authenticated:
- *   - Displays a greeting with the user's name 
- *   - Provides a logout button 
- * - If the user is unauthenticated:
- *   - Display Login and Register links 
- * 
- * @param {Object} props              - component's props 
- * @param {string} props.status       - authentication status of user: 'loading' / 'authenticated' / 'unauthenticated'
- * @param {string} props.userName     - name of authenticated user 
- * @param {Function} props.clearcart  - function to clear shopping cart 
- * @returns {JSX.Element}             - returns JSX elements with appropriate links based on user's authentication status 
- */
-function AuthLinks({status, clearCart}) {
-  if (status === 'loading') {
-    return <span>Loading...</span>
-  }
+function AuthLinks({ status, clearCart }) {
+  if (status === 'loading') return <span>Loading...</span>;
+
   if (status === 'authenticated') 
     return (
-      <>
-      {/* Logout Button */}
-        <button 
-          onClick={() => {           
-            // clear shopping cart
-            clearCart();  
-            // log user out of application
-            signOut();
-            // redirect user to home page 
-            router.push('/');  
-          }} 
-          className="bg-primary rounded-full text-white px-8 py-2">
-            LOGOUT
-        </button>
-      </>
-    )
-  if (status === 'unauthenticated') {
-    return (
-      <>
-        <Link href={'/login'}>Login</Link>
-        <Link href={'/register'} className="bg-primary rounded-full text-white px-8 py-2">
-          REGISTER 
-        </Link>
-      </>
-    )
-  }
+      <button 
+        onClick={() => {           
+          clearCart();  
+          signOut();
+          router.push('/');  
+        }} 
+
+        // Logout Button 
+        className="
+          bg-primary rounded-full px-4 sm:px-6 py-2 sm:py-4 
+          text-white font-semibold text-base md:text-lg lg:text-xl">
+          LOGOUT
+      </button>
+    );
+
+  return (
+    <>
+      {/* Login Button */} 
+      <Link 
+        href={'/login'} 
+        className="
+          bg-primary rounded-full px-4 md:px-10 lg:px-12 py-1 sm:py-2 lg:py-4 
+          text-white font-semibold text-base md:text-lg lg:text-2xl">
+        LOGIN 
+      </Link>
+    </>
+  );
 }
 
 export default function Header() {
-
-  // get session details 
   const session = useSession(); 
   const status = session?.status; 
-  const userData = session.data?.user; 
-
-  let userName = userData?.name || userData?.email; 
-
-  // get cart products and clearCart function from CartContext 
   const { cartProducts, clearCart } = useContext(CartContext); 
-  if (userName && userName.includes(' ')) {
-    userName = userName.split(' ')[0]; 
-  }
-
-  // router instance for navigation 
   const router = useRouter();
-  
+
   return (
-    <header>
-      <div className="hidden md:flex items-center justify-between px-8 py-4"> {/* Added padding for spacing */}
-        {/* Left Navigation: Logo */}
-        <nav className="flex items-center">
-          <Link className="text-primary font-semibold text-5xl" href={'/'}>
-            Dough & Co.
-          </Link>
+    <section className="hero md:mt-4">
+      <div className="
+            max-w-screen mx-auto 
+            flex justify-between 
+            px-8 md:px-16 py-4">
+              
+        {/* Logo */}
+        <Link 
+          href={'/'}
+          className=
+            {`${luckiestguy.className} 
+            text-primary 
+            text-[2rem] md:text-[3rem] lg:text-[5rem]`}>
+          Dough & Co.
+        </Link>
+
+        {/* Central Navigation Links (hidden on small screens) */}
+        <nav 
+          className="
+            hidden xl:flex
+            flex flex-wrap items-center gap-8
+            text-gray-800 font-semibold text-2xl">
+          <Link href={'/'}>HOME</Link>
+          <Link href={'/menu'}>MENU</Link>
+          <Link href={'/#contact'}>CONTACT</Link>
         </nav>
 
-        {/* Centered Navigation Links */}
-        <nav className="flex items-center justify-center gap-8 flex-grow">
-          <Link href={'/'} className="text-gray-800 font-semibold">HOME</Link>
-          <Link href={'/menu'} className="text-gray-800 font-semibold">MENU</Link>
-          <Link href={'/#about'} className="text-gray-800 font-semibold">ABOUT</Link>
-          <Link href={'/#contact'} className="text-gray-800 font-semibold">CONTACT</Link>
-        </nav>
-
-        {/* Right Navigation: Cart and Authentication links */}
-        <nav className="flex items-center gap-4 text-gray-500 font-semibold">
+        {/* Cart & Auth Links */}
+        <nav 
+          className="flex items-center gap-3 sm:gap-4">
           <AuthLinks status={status} clearCart={clearCart} />
           <Link href={'/cart'} className="relative">
             <ShoppingCart />
             {cartProducts?.length > 0 && (
-              <span className="absolute -top-2 -right-4 bg-primary text-white text-xs py-1 px-1 rounded-full leading-3">
+              <span className="absolute -top-2 -right-3 bg-primary text-white text-xs sm:text-sm px-2 py-1 rounded-full">
                 {cartProducts.length}
               </span>
             )}
           </Link>
+
+          {/* Profile Icon */}
+          {status === 'authenticated' && (
+            <Link href={'/profile'} className="relative">
+              <ProfileIcon className="w-7 h-7 text-gray-800" />
+            </Link>
+          )}
         </nav>
+
       </div>
-    </header>
+    </section>
   );
 }
